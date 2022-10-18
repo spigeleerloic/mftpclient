@@ -45,6 +45,6 @@ No support
 
 ### MacOS
 
-...
+TODO Add support for FTP over TLS
 
 

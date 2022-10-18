@@ -4,10 +4,6 @@ import socket
 import errno
 import sys
 
-_parser = argparse.ArgumentParser()
-_parser.add_argument("--host", default='127.0.0.1', type=str, help="The hostname of the server")
-_parser.add_argument("--port", default=2121, type=int, help="The port of the FTP server")
-
 # On Python 3.10 and above, socket.IPPROTO_MPTCP is defined.
 # If not, we set it manually
 try:
@@ -92,8 +88,11 @@ class FTPClient(ftplib.FTP):
         return self.welcome
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--host", default='127.0.0.1', type=str, help="The hostname of the server")
+    parser.add_argument("--port", default=21, type=int, help="The port of the FTP server")
     client = FTPClient()
-    args = _parser.parse_args()
+    args = parser.parse_args()
     client.connect(args.host, args.port)
     client.login()
     client.retrlines('LIST')

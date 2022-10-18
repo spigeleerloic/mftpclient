@@ -1,7 +1,12 @@
 import ftplib
-from socket import _GLOBAL_DEFAULT_TIMEOUT, SocketType, error
-import socket, errno
+import argparse
+import socket
+import errno
 import sys
+
+_parser = argparse.ArgumentParser()
+_parser.add_argument("--host", default='127.0.0.1', type=str, help="The hostname of the server")
+_parser.add_argument("--port", default=2121, type=int, help="The port of the FTP server")
 
 # On Python 3.10 and above, socket.IPPROTO_MPTCP is defined.
 # If not, we set it manually
@@ -16,7 +21,7 @@ _use_mptcp = True
 
 class FTPClient(ftplib.FTP):
 
-    def __init__(self, host='', user='', passwd='', acct='', timeout=_GLOBAL_DEFAULT_TIMEOUT, source_address=None, *, encoding='utf-8'):
+    def __init__(self, host='', user='', passwd='', acct='', timeout=socket._GLOBAL_DEFAULT_TIMEOUT, source_address=None, *, encoding='utf-8'):
             super().__init__(host, user, passwd, acct, timeout, source_address, encoding=encoding)
 
     def get_socket(self, af, socktype):
@@ -36,7 +41,7 @@ class FTPClient(ftplib.FTP):
         # Multipath TCP does not work or socket failed, we try TCP
         return socket.socket(af, socktype, socket.IPPROTO_TCP)
 
-    def create_connection(self, address, timeout=_GLOBAL_DEFAULT_TIMEOUT, source_address=None):
+    def create_connection(self, address, timeout=socket._GLOBAL_DEFAULT_TIMEOUT, source_address=None):
         host, port = address
         err = None
         for res in socket.getaddrinfo(host, port, 0, socket.SOCK_STREAM):
@@ -44,7 +49,7 @@ class FTPClient(ftplib.FTP):
             sock = None
             try:
                 sock = self.get_socket(af, socktype)
-                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                if timeout is not socket._GLOBAL_DEFAULT_TIMEOUT:
                     sock.settimeout(timeout)
                 if source_address:
                     sock.bind(source_address)
@@ -53,7 +58,7 @@ class FTPClient(ftplib.FTP):
                 err = None
                 return sock
 
-            except error as _:
+            except socket.error as _:
                 err = _
                 if sock is not None:
                     sock.close()
@@ -65,7 +70,7 @@ class FTPClient(ftplib.FTP):
                 # Break explicitly a reference cycle
                 err = None
         else:
-            raise error("getaddrinfo returns an empty list")
+            raise socket.error("getaddrinfo returns an empty list")
 
 
     def connect(self, host='', port=0, timeout=-999, source_address=None):
@@ -88,7 +93,8 @@ class FTPClient(ftplib.FTP):
 
 if __name__ == "__main__":
     client = FTPClient()
-    client.connect('127.0.0.1', 2121)
+    args = _parser.parse_args()
+    client.connect(args.host, args.port)
     client.login()
     client.retrlines('LIST')
     client.quit()

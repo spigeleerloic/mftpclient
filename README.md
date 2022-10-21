@@ -4,8 +4,8 @@ Minimal Python FTP client in order to allow File Transfer on top of Multipath TC
 
 
 ## Table of Contents
-- [Getting Started](#getting_started)
-- [Enabling MPTCP](#installing)
+- Getting Started]
+- Enabling MPTCP
 
 ## Getting Started 
 

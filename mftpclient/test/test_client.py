@@ -1,12 +1,10 @@
-#!/usr/bin/env python3
+#!/usr/bin/python
 
-import sys
 import socket
 import argparse
-print(sys.path)
 
-from mftpclient.tests import unittest
-from mftpclient.tests import PyftpclientTestCase
+from mftpclient.test import unittest
+from mftpclient.test import PyftpclientTestCase
 
 if hasattr(socket, 'socketpair'):
     socketpair = socket.socketpair
@@ -21,6 +19,6 @@ class MPTCPSocketTesting(PyftpclientTestCase):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument("-v", "verbose", action='store_true', help="Enables debug mode")
+    parser.add_argument("-v", "--verbose", default=False, action="store_true", help="Enables verbose mode")
     args = parser.parse_args()
     unittest.main(verbosity=args.verbose)

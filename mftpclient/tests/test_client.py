@@ -5,8 +5,8 @@ import socket
 import argparse
 print(sys.path)
 
-from pyftpclient.tests import unittest
-from pyftpclient.tests import PyftpclientTestCase
+from mftpclient.tests import unittest
+from mftpclient.tests import PyftpclientTestCase
 
 if hasattr(socket, 'socketpair'):
     socketpair = socket.socketpair

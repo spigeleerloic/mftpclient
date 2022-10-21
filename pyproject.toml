@@ -1,0 +1,23 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "mftpclient"
+version = "0.0.1"
+authors = [
+  { name="Ingenzi Vany", email="ingenzivany@gmail.com" },
+]
+description = "A minimal Multipath TCP client"
+readme = "README.md"
+requires-python = ">=3.70"
+classifiers = [
+    "Development Status :: 1 - Planning",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Topic :: Communications :: File Sharing", 
+    "Topic :: Internet :: File Transfer Protocol (FTP)"
+]
+
+[project.urls]
+"Homepage" = "https://github.com/vanyingenzi/mftpclient"

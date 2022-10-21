@@ -1,4 +1,4 @@
-from pyftpclient._compat import IS_PY3
+from mftpclient._compat import IS_PY3
 
 if IS_PY3:
     import unittest

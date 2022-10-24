@@ -4,7 +4,7 @@ Minimal Python FTP client in order to allow File Transfer on top of Multipath TC
 
 
 ## Table of Contents
-- Getting Started]
+- Getting Started
 - Enabling MPTCP
 
 ## Getting Started 
@@ -31,7 +31,7 @@ The expected result should be `net.mptcp.enabled = 1`. It is possible that the o
 sudo sysctl -w net.mptcp.enabled=1
 ```
 
-Some **FTP** commands (especially `PORT`) are changed when passing through the internet by middleboxes. In order for **MTCP** to detect such changes both the client and sender have to enable the MTCP Checksum. If the checksum calculated and sent by the sender mismatch the one calculated by the receiver, then the connections fallsback to a TCP connection to preserve the established connection. More about the topic on this [page](https://obonaventure.github.io/mmtp-book/mptcp.html?highlight=ftp#coping-with-middlebox-interference).
+Some **FTP** commands (especially `PORT`) are changed when passing through the internet by middleboxes. In order for **MTCP** to detect such changes both the client and sender have to enable the MTCP Checksum. If the checksum calculated and sent by the sender mismatch the one calculated by the receiver, then the connections fallsback to a TCP connection to preserve the established connection. More about the topic on this [page](https://obonaventure.github.io/mmtp-book/mptcp.html?highlight=ftp#coping-with-middlebox-interference). Note that for FTPS this step is not neccessary.
 
 To enable the **MPTCP** checksum run :
 
@@ -44,7 +44,5 @@ sudo sysctl -w net.mptcp.checksum_enabled=1
 No support
 
 ### MacOS
-
-TODO Add support for FTP over TLS
 
 

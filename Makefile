@@ -5,7 +5,7 @@
 PYTHON=python3
 INSTALL_OPTS = `$(PYTHON) -c "import sys; print('' if hasattr(sys, 'real_prefix') else '--user')"`
 
-all : tests
+all : test
 
 ##################################################
 # Install 
@@ -23,5 +23,5 @@ uninstall:  ## Uninstall this package.
 # Testing 
 ##################################################
 
-tests:
+test:
 	$(PYTHON) mftpclient/test/test_client.py -v

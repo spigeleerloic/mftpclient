@@ -3,7 +3,6 @@
 ##################################################
 
 PYTHON=python3
-INSTALL_OPTS = `$(PYTHON) -c "import sys; print('' if hasattr(sys, 'real_prefix') else '--user')"`
 
 all : test
 
@@ -26,6 +25,7 @@ clean:
 		build/ \
 		dist/ \
 		docs/_build/ \
+		.pytest_cache/ \
 		tmp/
 
 ##################################################

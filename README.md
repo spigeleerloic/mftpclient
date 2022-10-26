@@ -1,6 +1,5 @@
 # mftpclient
-![release badge](https://badgen.net/https/ingenzivany.npkn.net/mftpclient-version) ![license MIT badge](https://badgen.net/badge/license/MIT/blue)
-
+![release badge](https://badgen.net/https/ingenzivany.npkn.net/mftpclient-version) ![license MIT badge](https://badgen.net/badge/license/MIT/blue) ![tests](https://github.com/vanyingenzi/mftpclient/actions/workflows/tests.yaml/badge.svg)
 
 
 ## About

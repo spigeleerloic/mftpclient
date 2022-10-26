@@ -10,7 +10,7 @@ authors = [
 ]
 description = "A minimal Multipath TCP client"
 readme = "README.md"
-requires-python = ">=3.70"
+requires-python = ">=3.7"
 classifiers = [
     "Development Status :: 1 - Planning",
     "Operating System :: POSIX :: Linux",

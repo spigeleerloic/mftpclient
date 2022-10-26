@@ -33,7 +33,7 @@ clean:
 ##################################################
 
 install:
-	pip install -e
+	$(PYTHON) -m pip install -e . --user
 
 uninstall:  ## Uninstall this package.
 	cd ..; $(PYTHON) -m pip uninstall -y -v mftpclient || true
@@ -55,12 +55,10 @@ pre-release:
 	python3 -m pip install --upgrade twine
 	$(PYTHON) -c \
 		"from mftpclient import __ver__ as ver; \
-		history = open('CHANGES.md').read(); \
+		changes = open('CHANGES.md').read(); \
 		pyproject = open('pyproject.toml').read(); \
-		setup = open('setup.py').read(); \
-		assert ver in history, '%r not in CHANGES.md' % ver; \
+		assert ver in changes, '%r not in CHANGES.md' % ver; \
 		assert ver in pyproject, '%r not in pyproject.toml' % ver; \
-		assert ver in setup, '%r not in setup.py' % ver; \
 		"
 	$(PYTHON) -m build
 

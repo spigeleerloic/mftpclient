@@ -1,5 +1,11 @@
-# pyftpclient
+# mftpclient
+!\[release badge\](https://badgen.net/badge/release/0.0.2/green?)
+!\[license MIT badge\](https://badgen.net/badge/license/MIT/blue)
+!\[test status badge\](https://badgen.net/badge/test/passing/green)
 
+
+
+## About
 Minimal Python FTP client in order to allow File Transfer on top of Multipath TCP (MPTCP). For a deeper read about Multipath TCP please consult this [webpage](https://obonaventure.github.io/mmtp-book/).
 
 

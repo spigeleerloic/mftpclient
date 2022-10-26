@@ -1,3 +1,8 @@
+# Version 0.0.3 - Date : 
+- Still in beta release.
+- Added badges to README for better readability.
+- Removed setup.py to work with only pyproject.toml
+
 # Version 0.0.2 - Date : October 26, 2022
 - Still in beta release.
 - Added couple unittests.

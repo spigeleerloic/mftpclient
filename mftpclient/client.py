@@ -78,10 +78,5 @@ if __name__ == "__main__":
     args = parser.parse_args()
     client.connect(args.host, args.port)
     client.login()
-    filename = "1GB.zip"
-    client.cwd('/demo/test_files/')
-    try:
-        fhandle = open("rcvd_"+filename, 'wb')
-        client.retrbinary("RETR " + filename , fhandle.write)
-    finally:
-        client.quit()
+    client.retrlines('LIST')
+    client.quit()

@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
    name='mftpclient',
-   version='0.0.1',
+   version='0.0.2',
    author='Vany Valentin Ingenzi',
    author_email='ingenzivany@gmail.com',
    packages=['mftpclient', 'mftpclient.test'],

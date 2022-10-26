@@ -4,16 +4,7 @@ import socket
 import errno
 import sys
 
-_parser = argparse.ArgumentParser()
-_parser.add_argument("--host", default='127.0.0.1', type=str, help="The hostname of the server")
-_parser.add_argument("--port", default=2121, type=int, help="The port of the FTP server")
-
-# On Python 3.10 and above, socket.IPPROTO_MPTCP is defined.
-# If not, we set it manually
-try:
-  IPPROTO_MPTCP = socket.IPPROTO_MPTCP
-except AttributeError:
-  IPPROTO_MPTCP = 262
+from mftpclient.mptcp_support import get_mptcp_socket
 
 # By default, the application wishes to use Multipath TCP for all sockets
 # provided that it is running on a system that supports Multipath TCP
@@ -25,21 +16,9 @@ class FTPClient(ftplib.FTP):
             super().__init__(host, user, passwd, acct, timeout, source_address, encoding=encoding)
 
     def get_socket(self, af, socktype):
-        global _use_mptcp
-        global IPPROTO_MPTCP
-        # If Multipath TCP is enabled on this system, we create a Multipath TCP
-        # socket
-        if _use_mptcp and socktype == socket.SOCK_STREAM:  
-            try:
-                return socket.socket(af, socktype, IPPROTO_MPTCP)
-            except socket.error as e:
-                # Multipath TCP is not supported, we fall back to regular TCP
-                # and remember that Multipath TCP is not enabled
-                if e.errno == errno.ENOPROTOOPT or e.errno == errno.ENOPROTONOSUPPORT :
-                    _use_mptcp = False
-                
+        sock, _ = get_mptcp_socket(af, socktype)
         # Multipath TCP does not work or socket failed, we try TCP
-        return socket.socket(af, socktype, socket.IPPROTO_TCP)
+        return sock
 
     def create_connection(self, address, timeout=socket._GLOBAL_DEFAULT_TIMEOUT, source_address=None):
         host, port = address
@@ -92,8 +71,11 @@ class FTPClient(ftplib.FTP):
         return self.welcome
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--host", default='127.0.0.1', type=str, help="The hostname of the server")
+    parser.add_argument("--port", default=2121, type=int, help="The port of the FTP server")
     client = FTPClient()
-    args = _parser.parse_args()
+    args = parser.parse_args()
     client.connect(args.host, args.port)
     client.login()
     client.retrlines('LIST')

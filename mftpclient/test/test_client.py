@@ -8,7 +8,7 @@ import string
 
 from mftpclient.client import FTPClient
 from mftpclient.test import unittest
-from mftpclient._compat import is_mptcp_supported_on_sytem
+from mftpclient._compat import is_mptcp_supported_on_sytem, is_mptcp_supported_and_enabled
 from mftpclient.mptcp_support import get_mptcp_socket
 from mftpclient.test.test_server import get_mptcp_server_socket
 
@@ -40,6 +40,32 @@ class MPTCPSocketTestIPv4(unittest.TestCase):
             _server_sock.close()
             _client_sock.close()
 
+    @unittest.skipIf(not is_mptcp_supported_and_enabled(), "Host OS supports MPTCP or MPTCP is enabled")
+    def test_mptcp_ipv4_socket_on_system_fallback_tcp(self):
+        _server_sock = None
+        _client_sock = None
+
+        try:
+            _server_sock, _server_used_mptcp = get_mptcp_server_socket(af=socket.AF_INET6)
+            _client_sock, _client_used_mptcp = get_mptcp_socket(af=socket.AF_INET6)
+
+            self.assertFalse(_server_used_mptcp)
+            self.assertFalse(_client_used_mptcp)
+
+            _client_sock.connect(_server_sock.getsockname())
+            text_length = 1024
+            random_text = "".join(random.choice(string.ascii_letters) for _ in range(text_length))
+            _client_sock.sendall(str.encode(random_text))
+            conn, addr = _server_sock.accept()
+            with conn:
+                recv_text = conn.recv(text_length).decode()
+            self.assertEqual(random_text, recv_text)
+            self.assertEqual(addr, _client_sock.getsockname())
+
+        finally:
+            _server_sock.close()
+            _client_sock.close()
+
 class MPTCPSocketTestIPv6(unittest.TestCase):
 
     @unittest.skipIf(not is_mptcp_supported_on_sytem(), "Host OS doesn't support MPTCP")
@@ -60,6 +86,31 @@ class MPTCPSocketTestIPv6(unittest.TestCase):
             self.assertEqual(random_text, recv_text)
             self.assertEqual(addr, _client_sock.getsockname())
             
+        finally:
+            _server_sock.close()
+            _client_sock.close()
+
+    @unittest.skipIf(is_mptcp_supported_on_sytem(), "Host OS supports MPTCP")
+    def test_mptcp_ipv6_socket_on_system_fallback_tcp(self):
+        _server_sock = None
+        _client_sock = None
+        try:
+            _server_sock, _server_used_mptcp = get_mptcp_server_socket(af=socket.AF_INET6)
+            _client_sock, _client_used_mptcp = get_mptcp_socket(af=socket.AF_INET6)
+
+            self.assertFalse(_server_used_mptcp)
+            self.assertFalse(_client_used_mptcp)
+
+            _client_sock.connect(_server_sock.getsockname())
+            text_length = 1024
+            random_text = "".join(random.choice(string.ascii_letters) for _ in range(text_length))
+            _client_sock.sendall(str.encode(random_text))
+            conn, addr = _server_sock.accept()
+            with conn:
+                recv_text = conn.recv(text_length).decode()
+            self.assertEqual(random_text, recv_text)
+            self.assertEqual(addr, _client_sock.getsockname())
+
         finally:
             _server_sock.close()
             _client_sock.close()

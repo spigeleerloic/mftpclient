@@ -26,6 +26,18 @@ def _compare_kernel_version(this_version, other_version):
             return 1
     return 0
 
+def _is_mptcp_enabled():
+    cmd_result, _ = subprocess.Popen(['sysctl','net.mptcp.enabled'],stdout=subprocess.PIPE).communicate()
+    result = cmd_result.decode("utf-8")
+    split_result = result.strip().split("=")
+    enabled = 0
+    if len(split_result) > 1:
+        enabled = split_result[1]
+    print(f"enabled : {bool(enabled)}")
+    return enabled
+
+
+
 def is_mptcp_supported_on_sytem():
     if platform.system() != "Linux":
         return False
@@ -33,3 +45,12 @@ def is_mptcp_supported_on_sytem():
     if _compare_kernel_version(kernel_version, "5.6") < 0:
         return False
     return True
+
+def is_mptcp_supported_and_enabled():
+    if platform.system() != "Linux":
+        return False
+    kernel_version = _get_linux_kernel_version()
+    if _compare_kernel_version(kernel_version, "5.6") < 0 and not _is_mptcp_enabled():
+        return False
+    return True
+

@@ -90,7 +90,7 @@ class MPTCPSocketTestIPv6(unittest.TestCase):
             _server_sock.close()
             _client_sock.close()
 
-    @unittest.skipIf(is_mptcp_supported_on_sytem(), "Host OS supports MPTCP")
+    @unittest.skipIf(not is_mptcp_supported_and_enabled(), "Host OS supports MPTCP or MPTCP is enabled")
     def test_mptcp_ipv6_socket_on_system_fallback_tcp(self):
         _server_sock = None
         _client_sock = None

@@ -32,9 +32,8 @@ def _is_mptcp_enabled():
     split_result = result.strip().split("=")
     enabled = 0
     if len(split_result) > 1:
-        enabled = split_result[1]
-    print(f"enabled : {bool(enabled)}")
-    return enabled
+        enabled = int(split_result[1])
+    return enabled == 1
 
 
 
@@ -50,7 +49,11 @@ def is_mptcp_supported_and_enabled():
     if platform.system() != "Linux":
         return False
     kernel_version = _get_linux_kernel_version()
-    if _compare_kernel_version(kernel_version, "5.6") < 0 and not _is_mptcp_enabled():
+    print(f'version kernel is supporting mptcp : {_compare_kernel_version(kernel_version, "5.6") >= 0}')
+    print(f"mptcp enabled on sysctl : {_is_mptcp_enabled()}")
+    if _compare_kernel_version(kernel_version, "5.6") >= 0 and _is_mptcp_enabled():
+        print(f"will skip")
         return False
+    print(f"will not skip")
     return True
 
